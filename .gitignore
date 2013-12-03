@@ -1,0 +1,9 @@
+tmp/
+pkg/
+
+ext/diablo_ext/Makefile
+
+*.gem
+*.so
+*.bundle
+*.o

@@ -1,0 +1,1 @@
+require 'diablo_ext'
