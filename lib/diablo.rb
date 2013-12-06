@@ -1,1 +1,1 @@
-require 'diablo_ext'
+require 'diablo/diablo'

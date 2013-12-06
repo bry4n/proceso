@@ -7,12 +7,12 @@ require 'rspec/core/rake_task'
 require 'rake/clean'
 
 CLEAN.include(
-  "ext/diablo_ext/*.o",
-  "ext/diablo_ext/*.bundle"
+  "ext/diablo/*.o",
+  "ext/diablo/*.bundle"
 )
 
 CLOBBER.include(
-  "ext/diablo_ext/Makefile",
+  "ext/diablo/Makefile",
   "pkg"
 )
 
@@ -23,7 +23,9 @@ Gem::PackageTask.new(gem_spec) do |pkg|
   pkg.need_tar = true
 end
 
-Rake::ExtensionTask.new("diablo_ext", gem_spec)
+Rake::ExtensionTask.new("diablo", gem_spec) do |ext|
+  ext.lib_dir = "lib/diablo"
+end
 
 RSpec::Core::RakeTask.new(:spec)
 

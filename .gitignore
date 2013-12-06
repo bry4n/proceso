@@ -3,7 +3,7 @@
 tmp/
 pkg/
 
-ext/diablo_ext/Makefile
+ext/diablo/Makefile
 
 *.gem
 *.so

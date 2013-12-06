@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.files        = Dir["lib/**/*.rb"]
 #  spec.executables  = ["diablo"]
   spec.test_files   = Dir["spec/**/*.rb"]
-  spec.require_paths << "ext/diablo_ext"
-  spec.extensions << "ext/diablo_ext/extconf.rb"
+  spec.require_paths << "ext/diablo"
+  spec.extensions << "ext/diablo/extconf.rb"
 
 #  spec.add_dependency "something"
 

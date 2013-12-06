@@ -13,7 +13,7 @@ diablo_base_init(VALUE self, VALUE name) {
   return self;
 }
 
-void Init_diablo_ext() {
+void Init_diablo() {
   rb_mDiablo     = rb_define_module("Diablo");
   rb_cDiabloBase = rb_define_class_under(rb_mDiablo, "Base", rb_cObject);
   rb_define_method(rb_cDiabloBase, "initialize", diablo_base_init, 1);
