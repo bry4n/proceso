@@ -7,30 +7,30 @@ require 'rspec/core/rake_task'
 require 'rake/clean'
 
 CLEAN.include(
-  "ext/diablo/*.o",
-  "ext/diablo/*.bundle"
+  "ext/proceso/*.o",
+  "ext/proceso/*.bundle"
 )
 
 CLOBBER.include(
-  "ext/diablo/Makefile",
+  "ext/proceso/Makefile",
   "pkg"
 )
 
-gem_spec = Gem::Specification.load("diablo.gemspec")
+gem_spec = Gem::Specification.load("proceso.gemspec")
 
 Gem::PackageTask.new(gem_spec) do |pkg|
   pkg.need_zip = true
   pkg.need_tar = true
 end
 
-Rake::ExtensionTask.new("diablo", gem_spec) do |ext|
-  ext.lib_dir = "lib/diablo"
+Rake::ExtensionTask.new("proceso", gem_spec) do |ext|
+  ext.lib_dir = "lib/proceso"
 end
 
 RSpec::Core::RakeTask.new(:spec)
 
 task :console do
-  system("irb -r ./lib/diablo")
+  system("irb -r ./lib/proceso")
 end
 
 task :build => [:clean, :compile]

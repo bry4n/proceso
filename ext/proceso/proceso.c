@@ -5,22 +5,22 @@
 #define PROCESS_RSS 0
 #define PROCESS_VMS 1
 
-static VALUE rb_mDiablo;
-static VALUE rb_cDiabloProcess;
+static VALUE rb_mProceso;
+static VALUE rb_cProcesoInfo;
 
 int iv2pid(VALUE self) {
   return FIX2INT(rb_iv_get(self, "@pid"));
 }
 
 static VALUE
-diablo__process_init(VALUE self, VALUE pid) {
+proceso__process_init(VALUE self, VALUE pid) {
   rb_iv_set(self, "@pid", pid);
   return self;
 }
 
-/* Process running? */
+/* Info running? */
 static VALUE
-diablo__process_running(VALUE self) {
+proceso__process_running(VALUE self) {
   int pid = iv2pid(self);
   rb_pid_t i = getpgid(pid);
   if (i < 0) {
@@ -29,17 +29,17 @@ diablo__process_running(VALUE self) {
   return Qtrue;
 }
 
-/* Process name */
+/* Info name */
 static VALUE
-diablo__process_name(VALUE self) {
+proceso__process_name(VALUE self) {
   int pid = iv2pid(self);
   char *process_name = rb_process_name(pid);
   return rb_str_new2(process_name);
 }
 
-/* Process Resource Usage */
+/* Info Resource Usage */
 static VALUE
-diablo__process_rusage(VALUE self) {
+proceso__process_rusage(VALUE self) {
   int pid = iv2pid(self);
   VALUE hash_rusage = rb_hash_new();
   struct rusage r;
@@ -68,36 +68,36 @@ diablo__process_rusage(VALUE self) {
 }
 
 
-/* Process Resident Size (bytes) */
+/* Info Resident Size (bytes) */
 static VALUE
-diablo__process_rss(VALUE self) {
+proceso__process_rss(VALUE self) {
   int ret = rb_process_memory_size(iv2pid(self), PROCESS_RSS);
   return INT2NUM(ret);
 }
 
-/* Process Virtual Size (bytes) */
+/* Info Virtual Size (bytes) */
 static VALUE
-diablo__process_vms(VALUE self) {
+proceso__process_vms(VALUE self) {
   int ret = rb_process_memory_size(iv2pid(self), PROCESS_VMS);
   return INT2NUM(ret);
 }
 
-/* Process User CPU */
+/* Info User CPU */
 static VALUE
-diablo__process_user_cpu(VALUE self) {
+proceso__process_user_cpu(VALUE self) {
   float val = rb_process_cpu_times(iv2pid(self), FCPU_USR);
   return rb_float_new(val);
 }
 
-/* Process System CPU */
+/* Info System CPU */
 static VALUE
-diablo__process_system_cpu(VALUE self) {
+proceso__process_system_cpu(VALUE self) {
   float val = rb_process_cpu_times(iv2pid(self), FCPU_SYS);
   return rb_float_new(val);
 }
 
 static VALUE
-diablo__process_cpu_usage(VALUE self) {
+proceso__process_cpu_usage(VALUE self) {
   int ncpu = rb_ncpu();
   float u1, u2;
   float usage;
@@ -108,21 +108,21 @@ diablo__process_cpu_usage(VALUE self) {
   return rb_float_new(usage);
 }
 
-void Init_diablo() {
-  rb_mDiablo        = rb_define_module("Diablo");
-  rb_define_const(rb_mDiablo, "NCPU", INT2NUM(rb_ncpu()));
+void Init_proceso() {
+  rb_mProceso        = rb_define_module("Proceso");
+  rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_ncpu()));
 
-  rb_cDiabloProcess = rb_define_class_under(rb_mDiablo, "Process", rb_cObject);
+  rb_cProcesoInfo = rb_define_class_under(rb_mProceso, "Info", rb_cObject);
 
-  rb_define_method(rb_cDiabloProcess, "initialize", diablo__process_init, 1);
-  rb_define_method(rb_cDiabloProcess, "running?", diablo__process_running, 0);
-  rb_define_method(rb_cDiabloProcess, "name", diablo__process_name, 0);
-  rb_define_method(rb_cDiabloProcess, "rusage", diablo__process_rusage, 0);
-  rb_define_method(rb_cDiabloProcess, "resident_size", diablo__process_rss, 0);
-  rb_define_method(rb_cDiabloProcess, "virtual_size", diablo__process_vms, 0);
-  rb_define_method(rb_cDiabloProcess, "user_cpu_times", diablo__process_user_cpu, 0);
-  rb_define_method(rb_cDiabloProcess, "system_cpu_times", diablo__process_system_cpu, 0);
-  rb_define_method(rb_cDiabloProcess, "cpu_usage", diablo__process_cpu_usage, 0);
+  rb_define_method(rb_cProcesoInfo, "initialize", proceso__process_init, 1);
+  rb_define_method(rb_cProcesoInfo, "running?", proceso__process_running, 0);
+  rb_define_method(rb_cProcesoInfo, "name", proceso__process_name, 0);
+  rb_define_method(rb_cProcesoInfo, "rusage", proceso__process_rusage, 0);
+  rb_define_method(rb_cProcesoInfo, "resident_size", proceso__process_rss, 0);
+  rb_define_method(rb_cProcesoInfo, "virtual_size", proceso__process_vms, 0);
+  rb_define_method(rb_cProcesoInfo, "user_cpu_times", proceso__process_user_cpu, 0);
+  rb_define_method(rb_cProcesoInfo, "system_cpu_times", proceso__process_system_cpu, 0);
+  rb_define_method(rb_cProcesoInfo, "cpu_usage", proceso__process_cpu_usage, 0);
 }
 
 

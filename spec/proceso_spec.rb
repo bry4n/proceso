@@ -1,15 +1,15 @@
 require "spec_helper"
 
-describe Diablo do
+describe Proceso do
 
-  let(:process) { Diablo::Process.new($$) }
+  let(:process) { Proceso::Info.new($$) }
 
   it "should create new Process object with pid" do
-    expect { Diablo::Process.new($$) }.to_not raise_error
+    expect { Proceso::Info.new($$) }.to_not raise_error
   end
 
   it "creates new Base object without argument will raise error" do
-    expect { Diablo::Process.new }.to raise_error
+    expect { Proceso::Info.new }.to raise_error
   end
 
   it "should be running" do
