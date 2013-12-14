@@ -8,6 +8,7 @@
 
 static VALUE rb_mProceso;
 static VALUE rb_cProcesoPID;
+static VALUE rb_cProcessResource;
 
 int iv2pid(VALUE self) {
   return FIX2INT(rb_iv_get(self, "@pid"));
@@ -30,12 +31,14 @@ proceso__process_running(VALUE self) {
   return Qtrue;
 }
 
-/* PID name */
+/* PID command line */
 static VALUE
-proceso__process_name(VALUE self) {
+proceso__process_command(VALUE self) {
   int pid = iv2pid(self);
-  char *process_name = rb_process_name(pid);
-  return rb_str_new2(process_name);
+  char *process_cmd = rb_process_command(pid);
+  if (process_cmd == NULL)
+    return Qnil;
+  return rb_str_new2(process_cmd);
 }
 
 /* PID Resource Usage */
@@ -99,7 +102,7 @@ proceso__process_system_cpu(VALUE self) {
 
 static VALUE
 proceso__process_cpu_usage(VALUE self) {
-  int ncpu = rb_ncpu();
+  int ncpu = rb_hw_ncpu();
   float u1, u2;
   float usage;
   u1 = rb_process_cpu_times(iv2pid(self), FCPU_USR);
@@ -111,19 +114,21 @@ proceso__process_cpu_usage(VALUE self) {
 
 void Init_proceso() {
   rb_mProceso        = rb_define_module("Proceso");
-  rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_ncpu()));
+  rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_hw_ncpu()));
 
   rb_cProcesoPID = rb_define_class_under(rb_mProceso, "PID", rb_cObject);
 
   rb_define_method(rb_cProcesoPID, "initialize", proceso__process_init, 1);
   rb_define_method(rb_cProcesoPID, "running?", proceso__process_running, 0);
-  rb_define_method(rb_cProcesoPID, "name", proceso__process_name, 0);
+  rb_define_method(rb_cProcesoPID, "command", proceso__process_command, 0);
   rb_define_method(rb_cProcesoPID, "rusage", proceso__process_rusage, 0);
   rb_define_method(rb_cProcesoPID, "resident_size", proceso__process_rss, 0);
   rb_define_method(rb_cProcesoPID, "virtual_size", proceso__process_vms, 0);
   rb_define_method(rb_cProcesoPID, "user_cpu_times", proceso__process_user_cpu, 0);
   rb_define_method(rb_cProcesoPID, "system_cpu_times", proceso__process_system_cpu, 0);
   rb_define_method(rb_cProcesoPID, "cpu_usage", proceso__process_cpu_usage, 0);
+
+
 }
 
 

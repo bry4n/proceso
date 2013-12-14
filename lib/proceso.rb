@@ -4,12 +4,14 @@ module Proceso
 
   class PID
 
+    alias exists? running?
+
     def path
-      File.dirname(self.name)
+      File.dirname(self.command)
     end
 
     def executable
-      File.basename(self.name)
+      File.basename(self.command)
     end
 
   end

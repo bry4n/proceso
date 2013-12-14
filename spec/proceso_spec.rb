@@ -16,8 +16,12 @@ describe Proceso do
     process.running?.should be_true
   end
 
-  it "should return process name" do
-    process.name.should =~ /ruby/
+  it "should be existed" do
+    process.exists?.should be_true
+  end
+
+  it "should return process command" do
+    process.command.should =~ /ruby/
   end
 
   it "should return resident size in bytes" do

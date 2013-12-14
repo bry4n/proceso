@@ -8,7 +8,7 @@
 #define FCPU_USR 0
 #define FCPU_SYS 1
 
-int rb_ncpu() {
+int rb_hw_ncpu() {
   int mib[2] = { CTL_HW, HW_NCPU };
   int ncpu, ret;
   size_t len;
@@ -54,28 +54,43 @@ float rb_process_cpu_times(int pid, int flag) {
   return 0.0;
 }
 
-char * rb_process_name(int pid) {
-  int argmax, nargs;
-  char *process, *process_name;
-  size_t buf_size;
-  int result;
+
+int rb_sysctl_kern_argmax() {
+  int ret, argmax;
   int mib[2] = { CTL_KERN, KERN_ARGMAX };
-  int mib2[3] = { CTL_KERN, KERN_PROCARGS2, pid };
-  buf_size = sizeof(argmax);
-  result = sysctl(mib, 2, &argmax, &buf_size, NULL, 0);
-  if (result >= 0) {
-    process = (char *)malloc(argmax);
-    if (process != NULL) {
-      buf_size = (size_t)argmax;
-      result = sysctl(mib2, 3, process, &buf_size, NULL, 0);
-      if (result >= 0) {
-        memcpy(&nargs, process, sizeof(nargs));
-        process_name = process + sizeof(nargs);
-      }
-      free(process);
-    }
+  size_t buf_size = sizeof(argmax);
+  ret = sysctl(mib, 2, &argmax, &buf_size, NULL, 0);
+  if (ret == 0) {
+    return argmax;
   }
-  return process_name;
+  return 0;
+}
+
+int rb_sysctl_kern_procargs2(int pid, char **process_name, int argmax, size_t buf_size) {
+  int ret, nargs;
+  int mib[3] = { CTL_KERN, KERN_PROCARGS, pid };
+  char *process, *name;
+  process = (char *)malloc(argmax);
+  ret = sysctl(mib, 3, process, &buf_size, NULL, 0);
+  if (ret < 0) {
+    free(process);
+    return 0;
+  }
+  memcpy(&nargs, process, sizeof(nargs));
+  *process_name = process + sizeof(nargs);
+  return 1;
+}
+
+char * rb_process_command(int pid) {
+  char *process_name;
+  int ret, argmax;
+  argmax = rb_sysctl_kern_argmax();
+  if (argmax) {
+    ret = rb_sysctl_kern_procargs2(pid, &process_name, argmax, (size_t)argmax);
+    if (ret == 1)
+      return process_name;
+  }
+  return NULL;
 }
 
 int rb_process_memory_size(int pid, int flag) {
