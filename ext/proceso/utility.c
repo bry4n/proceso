@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <errno.h>
 #include <sys/sysctl.h>
 #include <mach/mach.h>
@@ -16,7 +17,7 @@ int rb_ncpu() {
   if (ret != -1) {
     return ncpu;
   } else {
-    return NULL;
+    return 0;
   }
 }
 
@@ -89,9 +90,9 @@ int rb_process_memory_size(int pid, int flag) {
     if (kr == KERN_SUCCESS) {
       if (count == TASK_BASIC_INFO_COUNT) {
         if (flag == 1) {
-          result = basic_info.virtual_size;
+          result = (int)basic_info.virtual_size;
         } else {
-          result = basic_info.resident_size;
+          result = (int)basic_info.resident_size;
         }
       }
     }

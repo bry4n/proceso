@@ -2,14 +2,14 @@ require "spec_helper"
 
 describe Proceso do
 
-  let(:process) { Proceso::Info.new($$) }
+  let(:process) { Proceso::PID.new($$) }
 
   it "should create new Process object with pid" do
-    expect { Proceso::Info.new($$) }.to_not raise_error
+    expect { Proceso::PID.new($$) }.to_not raise_error
   end
 
   it "creates new Base object without argument will raise error" do
-    expect { Proceso::Info.new }.to raise_error
+    expect { Proceso::PID.new }.to raise_error
   end
 
   it "should be running" do

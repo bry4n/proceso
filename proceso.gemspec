@@ -3,7 +3,6 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'proceso/version'
 
-
 Gem::Specification.new do |spec|
   spec.name         = "proceso"
   spec.version      = Proceso::VERSION
@@ -15,12 +14,9 @@ Gem::Specification.new do |spec|
   spec.license      = "MIT"
 
   spec.files        = Dir["lib/**/*.rb"]
-#  spec.executables  = ["diablo"]
   spec.test_files   = Dir["spec/**/*.rb"]
   spec.require_paths << "ext/proceso"
   spec.extensions << "ext/proceso/extconf.rb"
-
-#  spec.add_dependency "something"
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rake-compiler"

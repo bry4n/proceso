@@ -1,12 +1,13 @@
 #include <ruby.h>
 #include <unistd.h>
-#include "process.h"
+
+#include "utility.h"
 
 #define PROCESS_RSS 0
 #define PROCESS_VMS 1
 
 static VALUE rb_mProceso;
-static VALUE rb_cProcesoInfo;
+static VALUE rb_cProcesoPID;
 
 int iv2pid(VALUE self) {
   return FIX2INT(rb_iv_get(self, "@pid"));
@@ -18,7 +19,7 @@ proceso__process_init(VALUE self, VALUE pid) {
   return self;
 }
 
-/* Info running? */
+/* PID running? */
 static VALUE
 proceso__process_running(VALUE self) {
   int pid = iv2pid(self);
@@ -29,7 +30,7 @@ proceso__process_running(VALUE self) {
   return Qtrue;
 }
 
-/* Info name */
+/* PID name */
 static VALUE
 proceso__process_name(VALUE self) {
   int pid = iv2pid(self);
@@ -37,7 +38,7 @@ proceso__process_name(VALUE self) {
   return rb_str_new2(process_name);
 }
 
-/* Info Resource Usage */
+/* PID Resource Usage */
 static VALUE
 proceso__process_rusage(VALUE self) {
   int pid = iv2pid(self);
@@ -68,28 +69,28 @@ proceso__process_rusage(VALUE self) {
 }
 
 
-/* Info Resident Size (bytes) */
+/* PID Resident Size (bytes) */
 static VALUE
 proceso__process_rss(VALUE self) {
   int ret = rb_process_memory_size(iv2pid(self), PROCESS_RSS);
   return INT2NUM(ret);
 }
 
-/* Info Virtual Size (bytes) */
+/* PID Virtual Size (bytes) */
 static VALUE
 proceso__process_vms(VALUE self) {
   int ret = rb_process_memory_size(iv2pid(self), PROCESS_VMS);
   return INT2NUM(ret);
 }
 
-/* Info User CPU */
+/* PID User CPU */
 static VALUE
 proceso__process_user_cpu(VALUE self) {
   float val = rb_process_cpu_times(iv2pid(self), FCPU_USR);
   return rb_float_new(val);
 }
 
-/* Info System CPU */
+/* PID System CPU */
 static VALUE
 proceso__process_system_cpu(VALUE self) {
   float val = rb_process_cpu_times(iv2pid(self), FCPU_SYS);
@@ -112,17 +113,17 @@ void Init_proceso() {
   rb_mProceso        = rb_define_module("Proceso");
   rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_ncpu()));
 
-  rb_cProcesoInfo = rb_define_class_under(rb_mProceso, "Info", rb_cObject);
+  rb_cProcesoPID = rb_define_class_under(rb_mProceso, "PID", rb_cObject);
 
-  rb_define_method(rb_cProcesoInfo, "initialize", proceso__process_init, 1);
-  rb_define_method(rb_cProcesoInfo, "running?", proceso__process_running, 0);
-  rb_define_method(rb_cProcesoInfo, "name", proceso__process_name, 0);
-  rb_define_method(rb_cProcesoInfo, "rusage", proceso__process_rusage, 0);
-  rb_define_method(rb_cProcesoInfo, "resident_size", proceso__process_rss, 0);
-  rb_define_method(rb_cProcesoInfo, "virtual_size", proceso__process_vms, 0);
-  rb_define_method(rb_cProcesoInfo, "user_cpu_times", proceso__process_user_cpu, 0);
-  rb_define_method(rb_cProcesoInfo, "system_cpu_times", proceso__process_system_cpu, 0);
-  rb_define_method(rb_cProcesoInfo, "cpu_usage", proceso__process_cpu_usage, 0);
+  rb_define_method(rb_cProcesoPID, "initialize", proceso__process_init, 1);
+  rb_define_method(rb_cProcesoPID, "running?", proceso__process_running, 0);
+  rb_define_method(rb_cProcesoPID, "name", proceso__process_name, 0);
+  rb_define_method(rb_cProcesoPID, "rusage", proceso__process_rusage, 0);
+  rb_define_method(rb_cProcesoPID, "resident_size", proceso__process_rss, 0);
+  rb_define_method(rb_cProcesoPID, "virtual_size", proceso__process_vms, 0);
+  rb_define_method(rb_cProcesoPID, "user_cpu_times", proceso__process_user_cpu, 0);
+  rb_define_method(rb_cProcesoPID, "system_cpu_times", proceso__process_system_cpu, 0);
+  rb_define_method(rb_cProcesoPID, "cpu_usage", proceso__process_cpu_usage, 0);
 }
 
 
