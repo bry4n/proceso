@@ -100,9 +100,6 @@ static VALUE
 diablo__process_cpu_usage(VALUE self) {
   int ncpu = rb_ncpu();
   float u1, u2;
-  // float s1, s2;
-  float delta_proc, delta_time;
-  float overall_percent;
   float usage;
   u1 = rb_process_cpu_times(iv2pid(self), FCPU_USR);
   usleep(100000);

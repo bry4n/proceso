@@ -8,29 +8,24 @@
 #define FCPU_SYS 1
 
 int rb_ncpu() {
-  int mib[2];
-  int ncpu;
+  int mib[2] = { CTL_HW, HW_NCPU };
+  int ncpu, ret;
   size_t len;
-
-  mib[0] = CTL_HW;
-  mib[1] = HW_NCPU;
   len = sizeof(ncpu);
-
-  if (sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1) {
+  ret = sysctl(mib, 2, &ncpu, &len, NULL, 0);
+  if (ret != -1) {
+    return ncpu;
+  } else {
     return NULL;
   }
-
-  return ncpu;
 }
 
 int rb_process_exists(int pid) {
-  if (pid < 0) {
+  if (pid < 0)
     return 0;
-  }
   int ret = kill(pid, 0);
-  if ((ret == 0) || (ret == EPERM)) {
+  if ((ret == 0) || (ret == EPERM))
     return 1;
-  }
   return 0;
 }
 
