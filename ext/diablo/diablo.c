@@ -1,4 +1,5 @@
 #include <ruby.h>
+#include <unistd.h>
 #include "process.h"
 
 #define PROCESS_RSS 0
@@ -81,8 +82,39 @@ diablo__process_vms(VALUE self) {
   return INT2NUM(ret);
 }
 
+/* Process User CPU */
+static VALUE
+diablo__process_user_cpu(VALUE self) {
+  float val = rb_process_cpu_times(iv2pid(self), FCPU_USR);
+  return rb_float_new(val);
+}
+
+/* Process System CPU */
+static VALUE
+diablo__process_system_cpu(VALUE self) {
+  float val = rb_process_cpu_times(iv2pid(self), FCPU_SYS);
+  return rb_float_new(val);
+}
+
+static VALUE
+diablo__process_cpu_usage(VALUE self) {
+  int ncpu = rb_ncpu();
+  float u1, u2;
+  // float s1, s2;
+  float delta_proc, delta_time;
+  float overall_percent;
+  float usage;
+  u1 = rb_process_cpu_times(iv2pid(self), FCPU_USR);
+  usleep(100000);
+  u2 = rb_process_cpu_times(iv2pid(self), FCPU_USR);
+  usage = ncpu * ((u2 - u1) * 100);
+  return rb_float_new(usage);
+}
+
 void Init_diablo() {
   rb_mDiablo        = rb_define_module("Diablo");
+  rb_define_const(rb_mDiablo, "NCPU", INT2NUM(rb_ncpu()));
+
   rb_cDiabloProcess = rb_define_class_under(rb_mDiablo, "Process", rb_cObject);
 
   rb_define_method(rb_cDiabloProcess, "initialize", diablo__process_init, 1);
@@ -91,6 +123,9 @@ void Init_diablo() {
   rb_define_method(rb_cDiabloProcess, "rusage", diablo__process_rusage, 0);
   rb_define_method(rb_cDiabloProcess, "resident_size", diablo__process_rss, 0);
   rb_define_method(rb_cDiabloProcess, "virtual_size", diablo__process_vms, 0);
+  rb_define_method(rb_cDiabloProcess, "user_cpu_times", diablo__process_user_cpu, 0);
+  rb_define_method(rb_cDiabloProcess, "system_cpu_times", diablo__process_system_cpu, 0);
+  rb_define_method(rb_cDiabloProcess, "cpu_usage", diablo__process_cpu_usage, 0);
 }
 
 

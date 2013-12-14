@@ -4,6 +4,25 @@
 #include <signal.h>
 #include <libproc.h>
 
+#define FCPU_USR 0
+#define FCPU_SYS 1
+
+int rb_ncpu() {
+  int mib[2];
+  int ncpu;
+  size_t len;
+
+  mib[0] = CTL_HW;
+  mib[1] = HW_NCPU;
+  len = sizeof(ncpu);
+
+  if (sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1) {
+    return NULL;
+  }
+
+  return ncpu;
+}
+
 int rb_process_exists(int pid) {
   if (pid < 0) {
     return 0;
@@ -17,8 +36,26 @@ int rb_process_exists(int pid) {
 
 int rb_process_info(int pid, int flavor, void *pti, int size) {
   int ret = proc_pidinfo(pid, flavor, 0, pti, size);
-  if (ret == 0) {
+  if ((ret == 0) || (ret != size)) {
+    return 0;
+  } else {
+    return 1;
   }
+}
+
+float rb_process_cpu_times(int pid, int flag) {
+  struct proc_taskinfo pti;
+  int ret;
+  ret = rb_process_info(pid, PROC_PIDTASKINFO, &pti, sizeof(pti));
+  if (ret == 0) {
+    return 0.0;
+  }
+  if (flag == FCPU_SYS) { // total system
+    return (float)pti.pti_total_system / 1000000000.0;
+  } else {
+    return (float)pti.pti_total_user / 1000000000.0;
+  }
+  return 0.0;
 }
 
 char * rb_process_name(int pid) {

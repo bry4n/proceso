@@ -12,6 +12,10 @@ describe Diablo do
     expect { Diablo::Process.new }.to raise_error
   end
 
+  it "should be running" do
+    process.running?.should be_true
+  end
+
   it "should return process name" do
     process.name.should =~ /ruby/
   end
@@ -26,6 +30,14 @@ describe Diablo do
 
   it "should return cpu usage" do
     process.cpu_usage.should be_kind_of(Float)
+  end
+
+  it "should return user cpu times" do
+    process.user_cpu_times.should be_kind_of(Float)
+  end
+
+  it "should return system cpu times" do
+    process.system_cpu_times.should be_kind_of(Float)
   end
 
 end
