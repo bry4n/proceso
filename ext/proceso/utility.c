@@ -1,3 +1,4 @@
+#include <ruby.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/sysctl.h>
@@ -69,7 +70,7 @@ int rb_sysctl_kern_argmax() {
 int rb_sysctl_kern_procargs2(int pid, char **process_name, int argmax, size_t buf_size) {
   int ret, nargs;
   int mib[3] = { CTL_KERN, KERN_PROCARGS, pid };
-  char *process, *name;
+  char *process;
   process = (char *)malloc(argmax);
   ret = sysctl(mib, 3, process, &buf_size, NULL, 0);
   if (ret < 0) {
@@ -115,48 +116,32 @@ int rb_process_memory_size(int pid, int flag) {
   return result;
 }
 
-// /* List of Processes */
-// static VALUE
-// diablo__process_list(VALUE self) {
-//   VALUE h_process_list = rb_hash_new();
-//   int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
-//   size_t buf_size;
-//   int result;
-//   result = sysctl(mib, 4, NULL, &buf_size, NULL, 0);
-//   if (result >= 0) {
-//     struct kinfo_proc *processes = NULL;
-//     int i, nb_entries;
-//     nb_entries = buf_size / sizeof(struct kinfo_proc);
-//     processes = (struct kinfo_proc*) malloc(buf_size);
-//     if (processes != NULL) {
-//       result = sysctl(mib, 4, processes, &buf_size, NULL, 0);
-//       if (result >= 0) {
-//         for (i = 0; i < nb_entries; i++) {
-//           int pid = processes[i].kp_proc.p_pid;
-//           char *process_name = get_process_name(pid);
-//           fixpt_t cpu = rb_process_cpu_usage(pid);
-//           printf("pid=%d cpu=%lu\n", pid, cpu);
-//           //rb_hash_aset(h_process_list, INT2NUM(pid), rb_str_new2(process_name));
-//         }
-//       }
-//       free(processes);
-//     }
-//   }
-//   return h_process_list;
-// }
-
-// fixpt_t rb_process_cpu_usage(int pid) {
-//   struct kinfo_proc *kp;
-//   int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid };
-//   size_t bufSize = 0;
-//   if ( sysctl(mib, 4, NULL, &bufSize, NULL, 0) >= 0 ) {
-//     kp = (struct kinfo_proc *)malloc( bufSize );
-//     if (kp == NULL)
-//       return -1;
-//     if (sysctl(mib, 4, kp, &bufSize, NULL, 0) < 0) {
-//       free( kp );
-//       return -1;
-//     }
-//   }
-//   return kp->kp_proc.p_pctcpu;
-// }
+/* List of Processes */
+int rb_process_list(int **pids) {
+  int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+  size_t buf_size;
+  int ret;
+  int list[sizeof(int)];
+  ret = sysctl(mib, 4, NULL, &buf_size, NULL, 0);
+  if (ret >= 0) {
+    struct kinfo_proc *processes = NULL;
+    int i, nb_entries;
+    nb_entries = buf_size / sizeof(struct kinfo_proc);
+    processes = (struct kinfo_proc*) malloc(buf_size);
+    if (processes != NULL) {
+      ret = sysctl(mib, 4, processes, &buf_size, NULL, 0);
+      if (ret >= 0) {
+        for (i = 0; i < nb_entries; i++) {
+          int pid = processes[i].kp_proc.p_pid;
+          list[i] = pid;
+        }
+        *pids = list;
+        free(processes);
+        return 1;
+      }
+      free(processes);
+      return 0;
+    }
+  }
+  return 0;
+}

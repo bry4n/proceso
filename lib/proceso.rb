@@ -1,26 +1,16 @@
 require 'proceso/proceso'
+require 'proceso/pid'
 require 'proceso/resource'
 
 module Proceso
+  extend self
 
-  class PID
-
-    attr_accessor :pid
-
-    alias exists? running?
-
-    def path
-      File.dirname(command)
+  def processes
+    @pids ||= begin
+      pids.map do |pid|
+        Proceso::PID.new(pid);
+      end
     end
-
-    def executable
-      File.basename(command)
-    end
-
-    def resource
-      @resource ||= Proceso::Resource.new(pid);
-    end
-
   end
 
 end
