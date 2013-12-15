@@ -24,6 +24,14 @@ describe Proceso::PID do
     process.command.should =~ /ruby/
   end
 
+  it "should return executable name" do
+    process.executable.should == "ruby"
+  end
+
+  it "should return path name" do
+    process.path.should =~ /bin$/
+  end
+
   it "should return resident size in bytes" do
     process.resident_size.should be_kind_of(Numeric)
   end
