@@ -1,6 +1,3 @@
-#ifndef PROCESO_NATIVE
-#define PROCESO_NATIVE
-
 #define PROCESS_RSS 0
 #define PROCESS_VMS 1
 #define FCPU_USR 0
@@ -23,6 +20,4 @@ int iv2pid(VALUE self);
 #  include <mach/mach.h>
 #  include <libproc.h>
 #  include "platform/osx.h"
-#endif
-
 #endif
