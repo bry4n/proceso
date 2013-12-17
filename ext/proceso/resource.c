@@ -40,8 +40,9 @@ proceso__resource_usage(VALUE self) {
 }
 #endif
 
-void Init_resource(VALUE rb_mProceso) {
+void Init__proceso_resource() {
 
+  VALUE rb_mProceso  = rb_define_module("Proceso");
   rb_cProcesoResource = rb_define_class_under(rb_mProceso, "Resource", rb_cObject);
 
   rb_define_method(rb_cProcesoResource, "initialize", proceso__resource_init, 1);

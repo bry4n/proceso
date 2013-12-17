@@ -69,8 +69,9 @@ proceso__process_cpu_usage(VALUE self) {
   return rb_float_new(usage);
 }
 
-void Init_pid(VALUE rb_mProceso) {
+void Init__proceso_pid() {
 
+  VALUE rb_mProceso  = rb_define_module("Proceso");
   rb_cProcesoPID = rb_define_class_under(rb_mProceso, "PID", rb_cObject);
 
   rb_define_method(rb_cProcesoPID, "initialize", proceso__process_init, 1);

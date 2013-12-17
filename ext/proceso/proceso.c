@@ -29,8 +29,8 @@ void Init_proceso() {
   rb_define_method(rb_mProceso, "pids", proceso__pids, 0);
 #endif
 
-  Init_pid(rb_mProceso);
-  Init_resource(rb_mProceso);
+  Init__proceso_pid();
+  Init__proceso_resource();
 }
 
 

@@ -1,14 +1,3 @@
-#include <ruby.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/sysctl.h>
-#include <signal.h>
-#include <mach/mach.h>
-#include <libproc.h>
-
-#define FCPU_USR 0
-#define FCPU_SYS 1
-
 int rb_hw_ncpu() {
   int mib[2] = { CTL_HW, HW_NCPU };
   int ncpu, ret;
@@ -20,15 +9,6 @@ int rb_hw_ncpu() {
   } else {
     return 0;
   }
-}
-
-int rb_process_exists(int pid) {
-  if (pid < 0)
-    return 0;
-  int ret = kill(pid, 0);
-  if ((ret == 0) || (ret == EPERM))
-    return 1;
-  return 0;
 }
 
 int rb_process_info(int pid, int flavor, void *pti, int size) {
