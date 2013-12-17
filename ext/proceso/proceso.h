@@ -1,6 +1,5 @@
 #include <ruby.h>
 #include <unistd.h>
-
 #include "utility.h"
 
 #define PROCESS_RSS 0

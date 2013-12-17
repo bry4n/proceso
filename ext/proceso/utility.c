@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/sysctl.h>
-#include <mach/mach.h>
 #include <signal.h>
+
+#ifdef __APPLE__
+#include <mach/mach.h>
 #include <libproc.h>
+#endif
 
 #define FCPU_USR 0
 #define FCPU_SYS 1

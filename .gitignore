@@ -5,6 +5,7 @@ pkg/
 
 ext/proceso/Makefile
 
+.vagrant/
 *.gem
 *.so
 *.bundle

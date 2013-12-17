@@ -7,7 +7,8 @@ proceso__pids(VALUE self) {
   int pids[sizeof(int)];
   rb_process_list(&pids);
   VALUE processes = rb_ary_new();
-  for(int i=0; i < pids; i++) {
+  int i;
+  for(i = 0; i < pids; i++) {
     rb_ary_push(processes, INT2NUM(pids[i]));
   }
   return processes;
