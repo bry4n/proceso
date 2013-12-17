@@ -2,10 +2,6 @@
 
 static VALUE rb_cProcesoPID;
 
-int iv2pid(VALUE self) {
-  return FIX2INT(rb_iv_get(self, "@pid"));
-}
-
 static VALUE
 proceso__process_init(VALUE self, VALUE pid) {
   rb_iv_set(self, "@pid", pid);

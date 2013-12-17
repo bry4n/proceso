@@ -1,5 +1,3 @@
-int iv2pid(VALUE self);
-
 static VALUE proceso__process_init(VALUE self, VALUE pid);
 static VALUE proceso__process_running(VALUE self);
 static VALUE proceso__process_command(VALUE self);
