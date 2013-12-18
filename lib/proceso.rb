@@ -1,16 +1,14 @@
-require 'proceso/proceso'
-require 'proceso/pid'
-require 'proceso/resource'
+
+case RUBY_PLATFORM
+when /linux/
+  require 'proceso/linux'
+when /darwin/
+  require 'proceso/darwin'
+end
 
 module Proceso
-  extend self
-
-  def processes
-    @pids ||= begin
-      pids.map do |pid|
-        Proceso::PID.new(pid);
-      end
-    end
-  end
 
 end
+
+require 'proceso/pid'
+require 'proceso/resource'

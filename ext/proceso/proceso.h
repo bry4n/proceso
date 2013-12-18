@@ -13,14 +13,9 @@
 #include <errno.h>
 #include <sys/sysctl.h>
 #include <signal.h>
-
-#if defined(__APPLE__)
-#  include <mach/mach.h>
-#  include <libproc.h>
-#elif defined(__linux__) || defined(__LINUX__) || defined(__linux)
-#  include <proc/readproc.h>
-#endif
+#include <mach/mach.h>
+#include <libproc.h>
 
 #include "utility.h"
 
-#endif \\ #define PROCESO
+#endif

@@ -1,6 +1,5 @@
 #include "proceso.h"
 
-#ifdef __APPLE__
 int rb_hw_ncpu() {
   int mib[2] = { CTL_HW, HW_NCPU };
   int ncpu, ret;
@@ -64,11 +63,9 @@ int rb_sysctl_kern_procargs2(int pid, char **process_name, int argmax, size_t bu
   *process_name = process + sizeof(nargs);
   return 1;
 }
-#endif
 
 char * rb_process_command(int pid) {
   char *process_name;
-#if defined(__APPLE__)
   int ret, argmax;
   argmax = rb_sysctl_kern_argmax();
   if (argmax) {
@@ -76,22 +73,11 @@ char * rb_process_command(int pid) {
     if (ret == 1)
       return process_name;
   }
-#elif defined(__linux__) || defined(__LINUX__)
-  PROCTAB *proc;
-  proc_t proc_info;
-  proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS);
-  memset(&proc_info, pid, &proc_info);
-  if (readproc(proc, &proc_info) != NULL) {
-    process_name = proc_info.cmd;
-    return process_name;
-  }
-#endif
   return NULL;
 }
 
 int rb_process_memory_size(int pid, int flag) {
   int result = 0;
-#if defined(__APPLE__)
   kern_return_t kr;
   task_t task;
   kr = task_for_pid(mach_task_self(), pid, &task);
@@ -109,12 +95,9 @@ int rb_process_memory_size(int pid, int flag) {
       }
     }
   }
-#elif defined(__linux__)
-#endif
   return result;
 }
 
-#ifdef __APPLE__
 /* List of Processes */
 int rb_process_list(int **pids) {
   int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
@@ -144,4 +127,3 @@ int rb_process_list(int **pids) {
   }
   return 0;
 }
-#endif

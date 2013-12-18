@@ -8,7 +8,6 @@ proceso__resource_init(VALUE self, VALUE pid) {
   return self;
 }
 
-#ifdef __APPLE__
 /* PID Resource Usage */
 static VALUE
 proceso__resource_usage(VALUE self) {
@@ -38,7 +37,6 @@ proceso__resource_usage(VALUE self) {
 
   return hash_rusage;
 }
-#endif
 
 void Init__proceso_resource() {
 
@@ -46,8 +44,6 @@ void Init__proceso_resource() {
   rb_cProcesoResource = rb_define_class_under(rb_mProceso, "Resource", rb_cObject);
 
   rb_define_method(rb_cProcesoResource, "initialize", proceso__resource_init, 1);
-#ifdef __APPLE__
   rb_define_method(rb_cProcesoResource, "usage", proceso__resource_usage, 0);
-#endif
 
 }

@@ -23,8 +23,14 @@ Gem::PackageTask.new(gem_spec) do |pkg|
   pkg.need_tar = true
 end
 
-Rake::ExtensionTask.new("proceso", gem_spec) do |ext|
-  ext.lib_dir = "lib/proceso"
+if RUBY_PLATFORM =~ /darwin/
+  Rake::ExtensionTask.new("proceso", gem_spec) do |ext|
+    ext.lib_dir = "lib/proceso/darwin"
+  end
+  task :build => [:clean, :compile]
+  task :default => [:build, :spec]
+else
+  task :default => [:spec]
 end
 
 RSpec::Core::RakeTask.new(:spec)
@@ -32,6 +38,3 @@ RSpec::Core::RakeTask.new(:spec)
 task :console do
   system("irb -r ./lib/proceso")
 end
-
-task :build => [:clean, :compile]
-task :default => [:build, :spec]

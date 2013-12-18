@@ -6,7 +6,6 @@ int iv2pid(VALUE self) {
   return FIX2INT(rb_iv_get(self, "@pid"));
 }
 
-#ifdef __APPLE__
 static VALUE
 proceso__pids(VALUE self) {
   int pids[sizeof(int)];
@@ -18,16 +17,13 @@ proceso__pids(VALUE self) {
   }
   return processes;
 }
-#endif
 
 void Init_proceso() {
 
   rb_mProceso        = rb_define_module("Proceso");
 
-#ifdef __APPLE__
   rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_hw_ncpu()));
   rb_define_method(rb_mProceso, "pids", proceso__pids, 0);
-#endif
 
   Init__proceso_pid();
   Init__proceso_resource();

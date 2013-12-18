@@ -16,7 +16,10 @@ Gem::Specification.new do |spec|
   spec.files        = Dir["lib/**/*.rb"]
   spec.test_files   = Dir["spec/**/*.rb"]
   spec.require_paths << "ext/proceso"
-  spec.extensions << "ext/proceso/extconf.rb"
+
+  if RUBY_PLATFORM =~ /darwin/
+    spec.extensions << "ext/proceso/extconf.rb"
+  end
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rake-compiler"
