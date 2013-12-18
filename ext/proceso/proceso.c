@@ -22,11 +22,10 @@ void Init_proceso() {
 
   rb_mProceso        = rb_define_module("Proceso");
 
-  rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_hw_ncpu()));
-  rb_define_method(rb_mProceso, "pids", proceso__pids, 0);
+  // rb_define_const(rb_mProceso, "NCPU", INT2NUM(rb_hw_ncpu()));
+  // rb_define_method(rb_mProceso, "pids", proceso__pids, 0);
 
   Init__proceso_pid();
-  Init__proceso_resource();
 }
 
 

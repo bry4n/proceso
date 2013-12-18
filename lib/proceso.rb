@@ -1,3 +1,6 @@
+module Proceso
+
+end
 
 case RUBY_PLATFORM
 when /linux/
@@ -6,9 +9,4 @@ when /darwin/
   require 'proceso/darwin'
 end
 
-module Proceso
-
-end
-
 require 'proceso/pid'
-require 'proceso/resource'
