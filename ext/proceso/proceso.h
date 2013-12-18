@@ -11,13 +11,9 @@
 #include <sys/sysctl.h>
 #include <signal.h>
 
-
-int iv2pid(VALUE self);
-
-#if defined(__linux__)
-#  include "platform/linux.h"
-#elif defined(__APPLE__)
+#if defined(__APPLE__)
 #  include <mach/mach.h>
 #  include <libproc.h>
-#  include "platform/osx.h"
 #endif
+
+#include "utility.h"

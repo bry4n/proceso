@@ -1,3 +1,5 @@
+#include "proceso.h"
+
 int rb_hw_ncpu() {
   int mib[2] = { CTL_HW, HW_NCPU };
   int ncpu, ret;
