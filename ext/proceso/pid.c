@@ -29,6 +29,7 @@ proceso__process_command(VALUE self) {
   return rb_str_new2(process_cmd);
 }
 
+#ifdef __APPLE__
 /* PID Resident Size (bytes) */
 static VALUE
 proceso__process_rss(VALUE self) {
@@ -68,6 +69,7 @@ proceso__process_cpu_usage(VALUE self) {
   usage = ncpu * ((u2 - u1) * 100);
   return rb_float_new(usage);
 }
+#endif
 
 void Init__proceso_pid() {
 
@@ -77,9 +79,11 @@ void Init__proceso_pid() {
   rb_define_method(rb_cProcesoPID, "initialize", proceso__process_init, 1);
   rb_define_method(rb_cProcesoPID, "running?", proceso__process_running, 0);
   rb_define_method(rb_cProcesoPID, "command", proceso__process_command, 0);
+#ifdef __APPLE__
   rb_define_method(rb_cProcesoPID, "resident_size", proceso__process_rss, 0);
   rb_define_method(rb_cProcesoPID, "virtual_size", proceso__process_vms, 0);
   rb_define_method(rb_cProcesoPID, "user_cpu_times", proceso__process_user_cpu, 0);
   rb_define_method(rb_cProcesoPID, "system_cpu_times", proceso__process_system_cpu, 0);
   rb_define_method(rb_cProcesoPID, "cpu_usage", proceso__process_cpu_usage, 0);
+#endif
 }
