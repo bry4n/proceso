@@ -11,7 +11,7 @@ module Proceso
         whcan nswap cnswap exit_signal processor rt_priority
         policy delayacct_blkio_ticks guest_time cguest_time
        )
-      info = proc(pid)
+      info = proc_info()
       resources = {}
       info.split(/ /).each_with_index do |line, i|
         resources[stat[i]] = line
@@ -19,7 +19,7 @@ module Proceso
       resources
     end
 
-    def proc(pid, type = "stat")
+    def proc_info(type = "stat")
       filename = "/proc/#{pid}/#{type}"
       return unless File.exist?(filename)
       File.read(filename).strip

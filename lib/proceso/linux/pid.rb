@@ -12,15 +12,11 @@ module Proceso
    end
 
    def command
-     proc(pid, "cmdline")
+     `which #{executable}`.strip
    end
 
    def executable
-     proc(pid, "comm")
-   end
-
-   def path
-     command.gsub(/\s-.*$/,'')
+     proc("comm")
    end
 
    def resident_size
