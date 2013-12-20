@@ -17,5 +17,15 @@ module Proceso
       @resource ||= Proceso::Resource.new(pid);
     end
 
+    def mem_size(format = :bytes)
+      rss = resident_size
+      case format.to_s
+      when "bytes" then rss
+      when "kb", "kilobytes" then rss.to_f / 1024.0
+      when "mb", "megabytes" then rss.to_f / 1024.0 / 1024.0
+      when "gb", "gigabytes" then rss.to_f / 1024.0 / 1024.0 / 1024.0
+      end
+    end
+
   end
 end

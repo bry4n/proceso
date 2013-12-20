@@ -52,4 +52,11 @@ describe Proceso::PID do
     process.system_cpu_times.should be_kind_of(Float)
   end
 
+  it "should return mem size" do
+    process.mem_size.should be_kind_of(Numeric)
+    process.mem_size(:kb).should be_kind_of(Float)
+    process.mem_size(:mb).should be_kind_of(Float)
+    process.mem_size(:gb).should be_kind_of(Float)
+  end
+
 end
