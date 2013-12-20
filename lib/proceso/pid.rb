@@ -13,10 +13,6 @@ module Proceso
       File.basename(command)
     end
 
-    def resource
-      @resource ||= Proceso::Resource.new(pid);
-    end
-
     def mem_size(format = :bytes)
       rss = resident_size
       case format.to_s
