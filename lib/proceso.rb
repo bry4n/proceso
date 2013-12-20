@@ -10,3 +10,7 @@ when /darwin/
 end
 
 require 'proceso/pid'
+
+if defined?(Rails) || defined?(Rack)
+  require 'proceso/middleware'
+end

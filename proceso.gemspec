@@ -21,6 +21,8 @@ Gem::Specification.new do |spec|
     spec.extensions << "ext/proceso/extconf.rb"
   end
 
+  spec.add_dependency "rack"
+
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rake-compiler"
   spec.add_development_dependency "rspec"
