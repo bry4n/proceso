@@ -12,11 +12,12 @@ module Proceso
    end
 
    def command
-     `which #{executable}`.strip
+    cmd = proc_info("comm")
+     `which #{cmd}`.strip
    end
 
    def executable
-     proc("comm")
+     proc_info("comm")
    end
 
    def resident_size
