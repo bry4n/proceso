@@ -13,7 +13,7 @@ module Proceso
         cpu_used    = payload[:cpu_used].to_f.round(1)
         path        = payload[:request].path_info
         resp_time   = payload[:resp_time]
-        puts "MEM: #{mem_used} CPU: #{cpu_used} RESP: #{resp_time}ms PATH: #{path} "
+        puts "MEM: #{mem_used}KB CPU: #{cpu_used} RESP: #{resp_time}ms PATH: #{path}"
         puts "******* END OF PROCESO INFORMATION *******"
         puts
       end
