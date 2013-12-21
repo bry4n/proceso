@@ -15,5 +15,5 @@ if RUBY_PLATFORM =~ /darwin/
   #   have_library("procps")
   # end
 
-  create_makefile('proceso/proceso')
+  create_makefile('proceso/darwin/proceso')
 end
