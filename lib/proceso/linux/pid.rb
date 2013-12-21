@@ -29,15 +29,18 @@ module Proceso
    end
 
    def cpu_usage
-     0.0
+     cpu_1 =  user_cpu_times
+     sleep 0.5
+     cpu_2 =  user_cpu_times
+     NCPU.to_f * (cpu_2.to_f - cpu_1.to_f) * 100.0
    end
 
    def user_cpu_times
-     0.0
+      pid_stat["utime"].to_f
    end
 
    def system_cpu_times
-     0.0
+      pid_stat["stime"].to_f
    end
 
  end
