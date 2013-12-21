@@ -2,10 +2,12 @@ require_relative 'linux/proc'
 require_relative 'linux/pid'
 
 module Proceso
-
   extend self
 
-  NCPU = `cat /proc/cpuinfo | egrep "core id|physical id" | tr -d "\n" | sed s/physical/\\nphysical/g | grep -v ^$ | sort | uniq | wc -l`.strip.to_i
+  NCPU = begin
+    cpuinfo = File.read("/proc/cpuinfo")
+    cpuinfo.strip.split(/\n/).grep(/processor/).count
+  end
 
   def pids
     Dir["/proc/*"].select do
