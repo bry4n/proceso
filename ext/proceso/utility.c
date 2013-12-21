@@ -99,11 +99,11 @@ int rb_process_memory_size(int pid, int flag) {
 }
 
 /* List of Processes */
-int rb_process_list(int **pids) {
+int * rb_process_list() {
   int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
   size_t buf_size;
   int ret;
-  int list[sizeof(int)];
+  int list[4096];
   ret = sysctl(mib, 4, NULL, &buf_size, NULL, 0);
   if (ret >= 0) {
     struct kinfo_proc *processes = NULL;
@@ -117,9 +117,8 @@ int rb_process_list(int **pids) {
           int pid = processes[i].kp_proc.p_pid;
           list[i] = pid;
         }
-        *pids = list;
         free(processes);
-        return 1;
+        return list;
       }
       free(processes);
       return 0;

@@ -1,4 +1,11 @@
 module Proceso
+  extend self
+
+  def processes
+    pids.map do |i|
+      Proceso::PID.new(i)
+    end
+  end
 
 end
 
