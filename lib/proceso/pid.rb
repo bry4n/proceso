@@ -3,8 +3,6 @@ module Proceso
 
     attr_accessor :pid
 
-    alias exists? running?
-
     def path
       File.dirname(command)
     end
