@@ -1,18 +1,19 @@
-require "mkmf"
+if RUBY_PLATFORM =~ /darwin/
 
-RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
+  require "mkmf"
 
-platform = RbConfig::CONFIG["target_os"]
+  RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
 
-# TODO: Add Linux Support
-# if platform =~ /linux/
-#   include_dirs = ["/usr/include", "/usr/local/include"]
-#   unless have_header("proc/readproc.h")
-#     abort "proc/readproc.h is missing - please install libproc-dev"
-#   end
-#   have_library("procps")
-# end
+  platform = RbConfig::CONFIG["target_os"]
 
-if platform =~ /darwin/
+  # TODO: Add Linux Support
+  # if platform =~ /linux/
+  #   include_dirs = ["/usr/include", "/usr/local/include"]
+  #   unless have_header("proc/readproc.h")
+  #     abort "proc/readproc.h is missing - please install libproc-dev"
+  #   end
+  #   have_library("procps")
+  # end
+
   create_makefile('proceso/proceso')
 end

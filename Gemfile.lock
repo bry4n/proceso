@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    proceso (0.0.0)
+    proceso (0.1.0)
       rack
 
 GEM
