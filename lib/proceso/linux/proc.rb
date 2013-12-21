@@ -10,7 +10,7 @@ module Proceso
         kstkesp kstkelp signal blocked sigignore sigcatch
         whcan nswap cnswap exit_signal processor rt_priority
         policy delayacct_blkio_ticks guest_time cguest_time
-       )
+      )
       info = proc_info()
       resources = {}
       info.split(/ /).each_with_index do |line, i|
