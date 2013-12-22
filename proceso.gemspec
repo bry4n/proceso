@@ -13,10 +13,10 @@ Gem::Specification.new do |spec|
   spec.homepage     = "https://github.com/bry4n/proceso"
   spec.license      = "MIT"
 
-  spec.files        = Dir["lib/**/*.rb", "ext/**/*"]
+  spec.files        = Dir["{lib,ext}/**/*.{rb,c,h}"]
   spec.test_files   = Dir["spec/**/*.rb"]
-  spec.require_paths << "ext/proceso"
 
+  spec.require_paths << "ext/proceso"
   spec.extensions << "ext/proceso/extconf.rb"
 
   spec.add_dependency "rack"

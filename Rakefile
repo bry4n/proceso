@@ -8,7 +8,6 @@ require 'rake/clean'
 
 CLEAN.include(
   "ext/proceso/*.o",
-  "ext/proceso/**/*.o",
   "ext/proceso/*.bundle",
   "ext/proceso/*.so"
   )
