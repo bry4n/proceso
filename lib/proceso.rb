@@ -8,14 +8,7 @@ module Proceso
   end
 
 end
-
-case RUBY_PLATFORM
-when /linux/
-  require 'proceso/linux'
-when /darwin/
-  require 'proceso/darwin'
-end
-
+require 'proceso/proceso'
 require 'proceso/pid'
 
 if defined?(Rails) || defined?(Rack)

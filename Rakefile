@@ -8,13 +8,15 @@ require 'rake/clean'
 
 CLEAN.include(
   "ext/proceso/*.o",
-  "ext/proceso/*.bundle"
-)
+  "ext/proceso/**/*.o",
+  "ext/proceso/*.bundle",
+  "ext/proceso/*.so"
+  )
 
 CLOBBER.include(
   "ext/proceso/Makefile",
   "pkg"
-)
+  )
 
 gem_spec = Gem::Specification.load("proceso.gemspec")
 
@@ -23,18 +25,14 @@ Gem::PackageTask.new(gem_spec) do |pkg|
   pkg.need_tar = true
 end
 
-if RUBY_PLATFORM =~ /darwin/
-  Rake::ExtensionTask.new("proceso", gem_spec) do |ext|
-    ext.lib_dir = "lib/proceso/darwin"
-  end
-  task :build => [:clean, :compile]
-  task :default => [:build, :spec]
-else
-  task :default => [:spec]
+Rake::ExtensionTask.new("proceso", gem_spec) do |ext|
+  ext.lib_dir = "lib/proceso"
 end
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :console do
+task :console => [:build] do
   system("irb -r ./lib/proceso")
 end
+task :build => [:clean, :compile]
+task :default => [:build, :spec]

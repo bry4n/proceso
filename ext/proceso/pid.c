@@ -19,6 +19,17 @@ proceso__process_running(VALUE self) {
   return Qtrue;
 }
 
+#if defined(__linux__) || defined(__LINUX__) || defined(__linux)
+static VALUE
+proceso__process_status(VALUE self) {
+  int pid = iv2pid(self);
+  char *process_status = rb_proc_status(pid);
+  if (process_status == NULL)
+    return Qnil;
+  return process_status;
+}
+#endif
+
 /* PID command line */
 static VALUE
 proceso__process_command(VALUE self) {
@@ -57,6 +68,7 @@ proceso__process_system_cpu(VALUE self) {
   return rb_float_new(val);
 }
 
+#ifdef __APPLE__
 static VALUE
 proceso__process_cpu_usage(VALUE self) {
   int ncpu = rb_hw_ncpu();
@@ -68,6 +80,7 @@ proceso__process_cpu_usage(VALUE self) {
   usage = ncpu * ((u2 - u1) * 100);
   return rb_float_new(usage);
 }
+#endif
 
 void Init__proceso_pid() {
 
@@ -81,5 +94,12 @@ void Init__proceso_pid() {
   rb_define_method(rb_cProcesoPID, "virtual_size", proceso__process_vms, 0);
   rb_define_method(rb_cProcesoPID, "user_cpu_times", proceso__process_user_cpu, 0);
   rb_define_method(rb_cProcesoPID, "system_cpu_times", proceso__process_system_cpu, 0);
+#if defined(__linux__) || defined(__LINUX__) || defined(__linux)
+  rb_define_method(rb_cProcesoPID, "status", proceso__process_status, 0);
+#endif
+
+#ifdef __APPLE__
   rb_define_method(rb_cProcesoPID, "cpu_usage", proceso__process_cpu_usage, 0);
+#endif
+
 }
