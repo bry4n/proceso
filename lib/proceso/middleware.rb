@@ -19,11 +19,9 @@ module Proceso
       end
     end
 
-    def self.subscribe
+    def self.subscribe(&blk)
       return unless defined?(ActiveSupport::Notifications)
-      ActiveSupport::Notifications.subscribe(SUBSCRIPTION) do |*args|
-        yield *args
-      end
+      ActiveSupport::Notifications.subscribe(SUBSCRIPTION, &blk)
     end
 
     attr_reader :app, :pid, :notifier

@@ -29,38 +29,34 @@ describe Proceso::PID do
   end
 
   it "should return resident size in bytes" do
-    process.stub(:resident_size).and_return(100)
     process.resident_size.should be_kind_of(Numeric)
+    process.stub(:resident_size).and_return(100)
     process.resident_size.should == 100
   end
 
   it "should return virtual size in bytes" do
-    process.stub(:virtual_size).and_return(100)
     process.virtual_size.should be_kind_of(Numeric)
+    process.stub(:virtual_size).and_return(100)
     process.virtual_size.should == 100
   end
 
-  it "should return cpu usage" do
-    process.stub(:cpu_usage).and_return(0.1)
-    process.cpu_usage.should be_kind_of(Float)
-    process.cpu_usage.should == 0.1
-  end
-
   it "should return user cpu times" do
-    process.stub(:user_cpu_times).and_return(0.1)
     process.user_cpu_times.should be_kind_of(Float)
+    process.stub(:user_cpu_times).and_return(0.1)
     process.user_cpu_times.should == 0.1
   end
 
   it "should return system cpu times" do
-    process.stub(:system_cpu_times).and_return(0.1)
     process.system_cpu_times.should be_kind_of(Float)
+    process.stub(:system_cpu_times).and_return(0.1)
     process.system_cpu_times.should == 0.1
   end
 
   it "should return mem size" do
-    rss = 10000000000
+    process.mem_size.should be_kind_of(Numeric)
+    rss = process.resident_size
     process.stub(:resident_size).and_return(rss)
+    rss *= 1024 if RUBY_PLATFORM =~ /linux/
     process.mem_size.should == rss
     process.mem_size(:kb).should == (rss / 1024.0)
     process.mem_size(:mb).should == (rss / 1024.0 / 1024.0)

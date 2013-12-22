@@ -8,7 +8,6 @@ def have_platform(name)
 end
 
 
-# set all object files to $objs before create_makefile.
 $objs = ["utility.o", "pid.o", "proceso.o"]
 case RUBY_PLATFORM
 when /linux/ then have_platform("linux")

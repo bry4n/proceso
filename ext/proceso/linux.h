@@ -6,6 +6,10 @@
 #include <sys/sysctl.h>
 #include <signal.h>
 
+#ifndef __LINUX__
+#  define __LINUX__
+#endif
+
 struct proc_pid_stat {
     int pid;      // %d
     char comm[256];   // %s
@@ -51,4 +55,10 @@ struct proc_pid_stat {
     unsigned long long delayacct_blkio_ticks; // %llu
 };
 
-int rb_proc_stat(int pid, struct proc_pid_stat *stat);
+int rb_proc_ncpu();
+int rb_proc_pid_vsize(int pid);
+int rb_proc_pid_rss(int pid);
+float rb_proc_pid_stime(int pid);
+float rb_proc_pid_utime(int pid);
+char * rb_proc_pid_cmdline(int pid);
+char * rb_proc_pid_name(int pid);

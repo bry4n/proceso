@@ -37,33 +37,4 @@ int rb_process_info(int pid, int flavor, void *pti, int size) {
   }
 }
 
-/* List of Processes */
-int * rb_process_list() {
-  int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
-  size_t buf_size;
-  int ret;
-  int list[4096];
-  ret = sysctl(mib, 4, NULL, &buf_size, NULL, 0);
-  if (ret >= 0) {
-    struct kinfo_proc *processes = NULL;
-    int i, nb_entries;
-    nb_entries = buf_size / sizeof(struct kinfo_proc);
-    processes = (struct kinfo_proc*) malloc(buf_size);
-    if (processes != NULL) {
-      ret = sysctl(mib, 4, processes, &buf_size, NULL, 0);
-      if (ret >= 0) {
-        for (i = 0; i < nb_entries; i++) {
-          int pid = processes[i].kp_proc.p_pid;
-          list[i] = pid;
-        }
-        free(processes);
-        return list;
-      }
-      free(processes);
-      return 0;
-    }
-  }
-  return 0;
-}
-
 #endif

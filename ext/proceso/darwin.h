@@ -15,4 +15,3 @@
 int rb_sysctl_kern_argmax();
 int rb_sysctl_kern_procargs2(int pid, char **process_name, int argmax, size_t buf_size);
 int rb_process_info(int pid, int flavor, void *pti, int size);
-int * rb_process_list();

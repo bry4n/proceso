@@ -13,6 +13,7 @@ module Proceso
 
     def mem_size(format = :bytes)
       rss = resident_size
+      rss *= 1024 if RUBY_PLATFORM =~ /linux/
       case format.to_s
       when "bytes" then rss
       when "kb", "kilobytes" then rss.to_f / 1024.0
