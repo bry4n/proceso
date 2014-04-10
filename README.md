@@ -1,6 +1,8 @@
 Proceso
 =======
 
+[![Build Status](https://travis-ci.org/bry4n/proceso.svg?branch=master)](https://travis-ci.org/bry4n/proceso)
+
 Proceso is a ruby gem to collect the process information.
 
 * [Information](#information)
