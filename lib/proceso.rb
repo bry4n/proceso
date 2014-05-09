@@ -9,7 +9,3 @@ module Proceso
   end
 
 end
-
-if defined?(Rails) || defined?(Rack)
-  require 'proceso/middleware'
-end
