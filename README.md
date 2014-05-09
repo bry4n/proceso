@@ -3,13 +3,12 @@ Proceso
 
 [![Build Status](https://travis-ci.org/bry4n/proceso.svg?branch=master)](https://travis-ci.org/bry4n/proceso)
 
-Proceso is a ruby gem to collect the process information.
+Proceso is a ruby gem to collect the process information. **This is still experimental**.  See [Contributing](#contributing) if you find problem or can improve this gem.
 
 * [Information](#information)
 * [Installation](#installation)
 * [Usage](#usage)
 * [List of available methods](#list-of-available-methods)
-* [Rack Middleware](#rack-middleware)
 * [Credits](#credits)
 * [Contributing](#contributing)
 * [License](#license)
@@ -50,62 +49,22 @@ irb(main):003:0> process.resident_size
 => 4794
 ```
 
-### List of available methods
+### List of Proceso methods
 
-**Proceso.current** - Current process
+| METHOD NAME | DESCRIPTION | TYPE |
+|------------|:--------------:|:----:|
+| Proceso.current | Grab current process instance | Proceso::PID object |
+| Proceso::PID#running? | Check if process is running or not | Boolean |
+| Proceso::PID#command | Grab the process command line and arguments| String |
+| Proceso::PID#executable | Grab the path of command name | String |
+| Proceso::PID#path | Grab the path of command line | String |
+| Proceso::PID#resident_size | Grab current resident size | Integer |
+| Proceso::PID#virtual_size | Grab current virtual resident size | Integer |
+| Proceso::PID#user_cpu_times | Grab current User CPU ticks | Integer |
+| Proceso::PID#system_cpu_times | Grab current System CPU ticks | Integer |
 
-**Proceso::PID#running?** -- Process alive?
+**FYI**: Linux returns resident and virtual size in kilobytes. OSX shows them in bytes.
 
-**Proceso::PID#command** -- Process Command Line
-
-**Proceso::PID#executable** -- Process Command Name
-
-**Proceso::PID#path** -- Path of Process Command Line
-
-**Proceso::PID#resident_size** -- Process Resident Size (memory)
-
-**Proceso::PID#resident_size** -- Process Virtual Size
-
-Note: Linux returns resident size value in kilobytes. OSX returns value in bytes.
-
-**Proceso::PID#mem_size** -- Process Memory Size (RSS)
-
-**Proceso::PID#user_cpu_times** -- Process User CPU ticks
-
-**Proceso::PID#system_cpu_times** -- Process System CPU ticks
-
-## Rack Middleware
-
-You can monitor your Ruby on Rails project's memory usage and cpu usage.
-
-**Rails**
-
-```
-
-# config/application.rb
-
-config.middleware.use Proceso::Middleware
-
-
-# config/initializers/proceso.rb
-
-Proceso::Middleware.report
-
-# or
-
-Proceso::Middleware.subscribe do |name, start, finish, id, payload|
-  puts
-  puts "******* PROCESO INFORMATION *******"
-  mem_used = (payload[:mem_used].to_f / 1024.0).round(1)
-  cpu_used = payload[:cpu_used].to_f.round(1)
-  resp_time = payload[:resp_time]
-  path     = payload[:request].path_info
-  puts "MEM: #{mem_used} CPU: #{cpu_used} RESP: #{resp_time} PATH: #{path}"
-  puts "******* END OF PROCESO INFORMATION *******"
-  puts
-end
-
-```
 
 ## Credits
 
