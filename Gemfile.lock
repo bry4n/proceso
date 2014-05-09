@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    proceso (0.2.0)
-      rack
+    proceso (0.2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -31,7 +30,6 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    rack (1.5.2)
     rake (10.1.0)
     rake-compiler (0.9.2)
       rake
